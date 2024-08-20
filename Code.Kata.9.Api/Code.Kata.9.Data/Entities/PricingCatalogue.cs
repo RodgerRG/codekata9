@@ -12,6 +12,7 @@ public class PricingCatalogue
     public TimeSpan CatalogueValidityTime { get; set; }
     
     public ICollection<PricingInfo> PricingInfos { get; set; }
+    public ICollection<Checkout> AssociatedCheckouts { get; set; }
 
     public void ValidatePricingCatalogue()
     {

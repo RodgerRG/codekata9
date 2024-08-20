@@ -6,17 +6,21 @@ public class Checkout
 {
     public Checkout(ICollection<CheckoutItem> items)
     {
-        CheckoutItems = items;
-        InitialiseCheckout();
+        CheckoutItems = new List<CheckoutItem>();
+        Total = 0;
+        InitialiseCheckout(items);
     }
     
     private readonly Dictionary<int, float> _checkoutLookup = new (); 
     
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int CheckoutId { get; set; }
+    public int PricingCatalogueId { get; set; }
     
     public ICollection<CheckoutItem> CheckoutItems { get; init; }
+    public float Total { get; set; }
     public DateTime ExpiryDate { get; set; }
+    public PricingCatalogue PricingCatalogue { get; set; }
     
     public void Scan(CheckoutItem item)
     {
@@ -24,18 +28,27 @@ public class Checkout
 
         if (_checkoutLookup.Remove(item.SalesItemId, out var existingQuantity))
         {
-            _checkoutLookup.Add(item.SalesItemId, existingQuantity + item.Quantity);
+            var updatedQuantity = existingQuantity + item.ItemRowQuantity;
+            _checkoutLookup.Add(item.SalesItemId, updatedQuantity);
+            ComputeTotal(item, existingQuantity, updatedQuantity);
             return;
         }
         
-        _checkoutLookup.Add(item.SalesItemId, item.Quantity);
+        _checkoutLookup.Add(item.SalesItemId, item.ItemRowQuantity);
+        ComputeTotal(item, 0, item.ItemRowQuantity);
     }
 
-    public void InitialiseCheckout()
+    private void ComputeTotal(CheckoutItem item, float oldQuantity, float newQuantity)
+    {
+        Total -= item.ComputeTotal(oldQuantity, PricingCatalogueId);
+        Total += item.ComputeTotal(newQuantity, PricingCatalogueId);
+    }
+
+    public void InitialiseCheckout(ICollection<CheckoutItem> items)
     {
         if (_checkoutLookup.Values.Count > 0)
             throw new InvalidOperationException("Cannot initialise a checkout that has already been initialised");
         
-        foreach(var item in CheckoutItems) Scan(item);
+        foreach(var item in items) Scan(item);
     }
 }
