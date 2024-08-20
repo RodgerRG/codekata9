@@ -7,9 +7,38 @@ public class PricingRule
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int PricingRuleId { get; init; }
+    public string PricingRuleName { get; init; }
 
-    public float CalculateDiscount(float itemQuantity)
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public PricingUnit PricingUnit { get; init; }
+    public float DiscountQuantityThreshold { get; init; }
+    
+    public float CostPerUnit { get; init; }
+
+    public float ComputeCost(float originalCostPerUnit, float itemQuantity)
     {
-        return 0;
+        var total = PricingUnit switch
+        {
+            PricingUnit.Each => CalculateEachTotal(originalCostPerUnit, itemQuantity),
+            PricingUnit.UnitWeight => CalculateWeightTotal(originalCostPerUnit, itemQuantity),
+            _ => throw new ArgumentOutOfRangeException()
+        };
+        return total;
+    }
+
+    private float CalculateEachTotal(float originalCostPerUnit, float itemQuantity)
+    {
+        var integerItemQuantity = (int) Math.Round(itemQuantity);
+        var integerItemThreshold = (int)Math.Round(DiscountQuantityThreshold);
+        //items not covered by the discount
+        var remaining = integerItemQuantity % integerItemThreshold;
+        var total = (integerItemQuantity - remaining) * CostPerUnit + remaining * originalCostPerUnit;
+        return total;
+    }
+
+    private float CalculateWeightTotal(float originalCostPerUnit, float itemQuantity)
+    {
+        if (itemQuantity > DiscountQuantityThreshold) return CostPerUnit * itemQuantity;
+        return originalCostPerUnit * itemQuantity;
     }
 }
