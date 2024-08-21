@@ -9,4 +9,17 @@
         <FileVersion>1.0.0.0</FileVersion>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Queries\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Code.Kata.9.Api.Models\Code.Kata.9.Api.Models.csproj" />
+      <ProjectReference Include="..\Code.Kata.9.Data.Repos\Code.Kata.9.Data.Repos.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MediatR" Version="12.4.0" />
+    </ItemGroup>
+
 </Project>

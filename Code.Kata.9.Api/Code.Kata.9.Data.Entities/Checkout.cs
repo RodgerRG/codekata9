@@ -16,8 +16,7 @@ public class Checkout
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int CheckoutId { get; set; }
     public int PricingCatalogueId { get; set; }
-    
-    public ICollection<CheckoutItem> CheckoutItems { get; init; }
+    public ICollection<CheckoutItem> CheckoutItems { get; set; }
     public float Total { get; set; }
     public DateTime ExpiryDate { get; set; }
     public PricingCatalogue PricingCatalogue { get; set; }

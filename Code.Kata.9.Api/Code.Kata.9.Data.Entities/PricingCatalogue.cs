@@ -4,6 +4,14 @@ namespace Code.Kata._9.Data.Entities;
 
 public class PricingCatalogue
 {
+    public PricingCatalogue() {}
+
+    public PricingCatalogue(DateTime initialisationDate, TimeSpan catalogueValidityTime)
+    {
+        PricingInfos = new List<PricingInfo>();
+        AssociatedCheckouts = new List<Checkout>();
+    }
+    
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int PricingCatalogueId { get; set; }
     

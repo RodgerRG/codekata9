@@ -13,4 +13,8 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.8" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Code.Kata.9.Data.Entities\Code.Kata.9.Data.Entities.csproj" />
+    </ItemGroup>
+
 </Project>

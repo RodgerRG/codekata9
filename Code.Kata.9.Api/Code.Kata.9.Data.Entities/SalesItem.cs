@@ -4,6 +4,16 @@ namespace Code.Kata._9.Data.Entities;
 
 public class SalesItem
 {
+    public SalesItem(){}
+
+    public SalesItem(string itemName, string itemDescription)
+    {
+        ItemName = itemName;
+        ItemDescription = itemDescription;
+
+        PricingInfos = new List<PricingInfo>();
+    }
+    
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int SalesItemId { get; set; }
 

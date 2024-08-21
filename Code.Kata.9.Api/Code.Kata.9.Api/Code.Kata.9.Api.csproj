@@ -22,8 +22,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Code.Kata.9.Api.Models\Code.Kata.9.Api.Models.csproj" />
       <ProjectReference Include="..\Code.Kata.9.AppServices\Code.Kata.9.AppServices.csproj" />
-      <ProjectReference Include="..\Code.Kata.9.Data\Code.Kata.9.Data.csproj" />
+      <ProjectReference Include="..\Code.Kata.9.Data.Repos\Code.Kata.9.Data.Repos.csproj" />
     </ItemGroup>
 
 </Project>
