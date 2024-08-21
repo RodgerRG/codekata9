@@ -1,0 +1,6 @@
+﻿services:
+  code.kata.9.api:
+    image: code.kata.9.api
+    build:
+      context: .
+      dockerfile: Code.Kata.9.Api/Dockerfile
