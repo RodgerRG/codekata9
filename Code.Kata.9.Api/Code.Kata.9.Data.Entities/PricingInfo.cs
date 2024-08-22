@@ -10,11 +10,12 @@ public class PricingInfo
     {
     }
 
-    public PricingInfo(int salesItemId, int pricingCatalogueId, float defaultCostPerUnit, string pricingUnitName)
+    public PricingInfo(int salesItemId, int pricingCatalogueId, PricingUnit pricingUnit, float defaultCostPerUnit, string pricingUnitName)
     {
         AlternatePricing = new List<PricingRule>();
         SalesItemId = salesItemId;
         PricingCatalogueId = pricingCatalogueId;
+        PricingUnit = pricingUnit;
         DefaultCostPerUnit = defaultCostPerUnit;
         PricingUnitName = pricingUnitName;
     }
@@ -25,7 +26,8 @@ public class PricingInfo
     public int SalesItemId { get; set; }
     public int PricingCatalogueId { get; set; }
     public float DefaultCostPerUnit { get; set; }
-
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public PricingUnit PricingUnit { get; init; }
     public string PricingUnitName { get; set; }
 
     //Related Entities
@@ -40,7 +42,7 @@ public class PricingInfo
         foreach (var rule in AlternatePricing)
         {
             //we want to take the lowest possible total based off special pricing
-            float alternateTotal = rule.ComputeCost(DefaultCostPerUnit, itemQuantity);
+            float alternateTotal = rule.ComputeCost(PricingUnit, DefaultCostPerUnit, itemQuantity);
             if (alternateTotal < total)
             {
                 total = alternateTotal;

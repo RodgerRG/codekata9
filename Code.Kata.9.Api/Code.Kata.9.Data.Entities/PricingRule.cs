@@ -10,30 +10,27 @@ public class PricingRule
     {
     }
 
-    public PricingRule(string pricingRuleName, PricingUnit pricingUnit, float discountQuantityThreshold,
+    public PricingRule(string pricingRuleName, float discountQuantityThreshold,
         float costPerUnit)
     {
         PricingRuleName = pricingRuleName;
-        PricingUnit = pricingUnit;
         DiscountQuantityThreshold = discountQuantityThreshold;
         CostPerUnit = costPerUnit;
     }
 
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int PricingRuleId { get; init; }
-
+    public int PricingInfoId { get; set; }
     public string PricingRuleName { get; init; }
-
-    [JsonConverter(typeof(JsonStringEnumConverter))]
-    public PricingUnit PricingUnit { get; init; }
-
     public float DiscountQuantityThreshold { get; init; }
-
     public float CostPerUnit { get; init; }
+    
+    //Related Entities
+    public PricingInfo PricingInfo { get; set; }
 
-    public float ComputeCost(float originalCostPerUnit, float itemQuantity)
+    public float ComputeCost(PricingUnit pricingUnit, float originalCostPerUnit, float itemQuantity)
     {
-        var total = PricingUnit switch
+        var total = pricingUnit switch
         {
             PricingUnit.Each => CalculateEachTotal(originalCostPerUnit, itemQuantity),
             PricingUnit.UnitWeight => CalculateWeightTotal(originalCostPerUnit, itemQuantity),

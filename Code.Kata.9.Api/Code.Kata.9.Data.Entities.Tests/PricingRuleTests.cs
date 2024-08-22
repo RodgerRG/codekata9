@@ -10,13 +10,13 @@ public class PricingRuleTests
     {
         //ARRANGE
         var pricingRule = new PricingRule(
-            "3 for 2", PricingUnit.Each, 3, 1
+            "3 for 2", 3, 1
         );
 
         var originalPrice = (float)1.50;
 
         //ACT
-        var cost = pricingRule.ComputeCost(originalPrice, 3);
+        var cost = pricingRule.ComputeCost(PricingUnit.Each, originalPrice, 3);
 
         //ASSERT
         cost.Should().Be(3);
@@ -27,13 +27,13 @@ public class PricingRuleTests
     {
         //ARRANGE
         var pricingRule = new PricingRule(
-            "3 for 2", PricingUnit.Each, 3, 1
+            "3 for 2", 3, 1
         );
 
         var originalPrice = (float)1.50;
 
         //ACT
-        var cost = pricingRule.ComputeCost(originalPrice, 4);
+        var cost = pricingRule.ComputeCost(PricingUnit.Each, originalPrice, 4);
 
         //ASSERT
         cost.Should().Be((float)4.50);
@@ -44,13 +44,13 @@ public class PricingRuleTests
     {
         //ARRANGE
         var pricingRule = new PricingRule(
-            "3 for 2", PricingUnit.Each, 3, 1
+            "3 for 2",3, 1
         );
 
         var originalPrice = (float)1.50;
 
         //ACT
-        var cost = pricingRule.ComputeCost(originalPrice, 0);
+        var cost = pricingRule.ComputeCost( PricingUnit.Each, originalPrice, 0);
 
         //ASSERT
         cost.Should().Be(0);
@@ -61,13 +61,13 @@ public class PricingRuleTests
     {
         //ARRANGE
         var pricingRule = new PricingRule(
-            "3 for 2", PricingUnit.Each, 3, 1
+            "3 for 2", 3, 1
         );
 
         var originalPrice = (float)1.50;
 
         //ACT
-        var cost = pricingRule.ComputeCost(originalPrice, 2);
+        var cost = pricingRule.ComputeCost(PricingUnit.Each,originalPrice, 2);
 
         //ASSERT
         cost.Should().Be(3);
@@ -78,13 +78,13 @@ public class PricingRuleTests
     {
         //ARRANGE
         var pricingRule = new PricingRule(
-            "1.50 per KG on purchases over 3KG", PricingUnit.UnitWeight, 3, (float)1.50
+            "1.50 per KG on purchases over 3KG", 3, (float)1.50
         );
 
         var originalPrice = (float)3.50;
 
         //ACT
-        var cost = pricingRule.ComputeCost(originalPrice, 2);
+        var cost = pricingRule.ComputeCost(PricingUnit.UnitWeight, originalPrice, 2);
 
         //ASSERT
         cost.Should().Be(7);
@@ -95,13 +95,13 @@ public class PricingRuleTests
     {
         //ARRANGE
         var pricingRule = new PricingRule(
-            "1.50 per KG on purchases over 3KG", PricingUnit.UnitWeight, 3, (float)1.50
+            "1.50 per KG on purchases over 3KG", 3, (float)1.50
         );
 
         var originalPrice = (float)3.50;
 
         //ACT
-        var cost = pricingRule.ComputeCost(originalPrice, 4);
+        var cost = pricingRule.ComputeCost(PricingUnit.UnitWeight,originalPrice, 4);
 
         //ASSERT
         cost.Should().Be(6);
