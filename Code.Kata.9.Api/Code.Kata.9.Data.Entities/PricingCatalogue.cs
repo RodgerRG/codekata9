@@ -36,4 +36,12 @@ public class PricingCatalogue
             seenSalesItemIds.Add(pricingInfo.SalesItemId);
         }
     }
+
+    public float ComputeItemCost(int salesItemId, float quantity)
+    {
+        var pricingInfo = PricingInfos.FirstOrDefault(pi => pi.SalesItemId == salesItemId);
+        if (pricingInfo is null) throw new InvalidOperationException("Sales item does not exist in this catalogue");
+
+        return pricingInfo.ComputeCost(quantity);
+    }
 }

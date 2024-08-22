@@ -39,8 +39,13 @@ public class Checkout
 
     private void ComputeTotal(CheckoutItem item, float oldQuantity, float newQuantity)
     {
-        Total -= item.ComputeTotal(oldQuantity, PricingCatalogueId);
-        Total += item.ComputeTotal(newQuantity, PricingCatalogueId);
+        Total -= PricingCatalogue.ComputeItemCost(item.SalesItemId, oldQuantity);
+        Total += PricingCatalogue.ComputeItemCost(item.SalesItemId, newQuantity);
+    }
+
+    public Dictionary<int, float> GetItemTotals()
+    {
+        return _checkoutLookup;
     }
 
     public void InitialiseCheckout(ICollection<CheckoutItem> items)

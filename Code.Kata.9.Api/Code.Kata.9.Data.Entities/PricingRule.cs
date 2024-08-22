@@ -21,6 +21,7 @@ public class PricingRule
 
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int PricingRuleId { get; init; }
+    public int PricingInfoId { get; set; }
 
     public string PricingRuleName { get; init; }
 
@@ -30,6 +31,9 @@ public class PricingRule
     public float DiscountQuantityThreshold { get; init; }
 
     public float CostPerUnit { get; init; }
+    
+    //Related Entities
+    public PricingInfo PricingInfo { get; set; }
 
     public float ComputeCost(float originalCostPerUnit, float itemQuantity)
     {

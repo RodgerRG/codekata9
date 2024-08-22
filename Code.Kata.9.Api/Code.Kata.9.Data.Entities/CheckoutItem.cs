@@ -13,9 +13,5 @@ public class CheckoutItem
     
     //Related Entities
     public SalesItem SalesItem { get; set; }
-
-    public float ComputeTotal(float itemQuantity, int catalogueId)
-    {
-        return SalesItem.ComputeCost(itemQuantity, catalogueId);
-    }
+    
 }
