@@ -10,7 +10,7 @@ public class PricingInfoTests
     {
         //ARRANGE
         var pricingInfo = new PricingInfo(
-            1, 1, 2, "Per Dozen"
+            1, 1, PricingUnit.Each, 2, "Per Dozen"
             );
 
         //ACT
@@ -25,11 +25,11 @@ public class PricingInfoTests
     {
         //ARRANGE
         var pricingInfo = new PricingInfo(
-            1, 1, 2, "Per Dozen"
+            1, 1,  PricingUnit.Each, 2, "Per Dozen"
         );
         
         pricingInfo.AlternatePricing.Add(
-            new PricingRule("More Expensive Somehow", PricingUnit.Each, 1, 3)
+            new PricingRule("More Expensive Somehow", 1, 3)
                 );
 
         //ACT
@@ -44,11 +44,11 @@ public class PricingInfoTests
     {
         //ARRANGE
         var pricingInfo = new PricingInfo(
-            1, 1, 2, "Per Dozen"
+            1, 1, PricingUnit.Each, 2, "Per Dozen"
         );
         
         pricingInfo.AlternatePricing.Add(
-            new PricingRule("Cheaper", PricingUnit.Each, 2, (float) 0.5)
+            new PricingRule("Cheaper", 2, (float) 0.5)
         );
 
         //ACT
@@ -63,15 +63,15 @@ public class PricingInfoTests
     {
         //ARRANGE
         var pricingInfo = new PricingInfo(
-            1, 1, 2, "Per Dozen"
+            1, 1,  PricingUnit.Each, 2, "Per Dozen"
         );
         
         pricingInfo.AlternatePricing.Add(
-            new PricingRule("Cheaper", PricingUnit.Each, 2, (float) 0.8)
+            new PricingRule("Cheaper", 2, (float) 0.8)
         );
         
         pricingInfo.AlternatePricing.Add(
-            new PricingRule("Cheaper", PricingUnit.Each, 2, (float) 0.5)
+            new PricingRule("Cheaper", 2, (float) 0.5)
         );
 
         //ACT

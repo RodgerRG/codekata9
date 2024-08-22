@@ -12,18 +12,19 @@ pricingCatalogue.PricingCatalogueId = 1;
 
 // Set up the sales items
 // Set up the pricing catalogue with pricing info
-for (int i = 1; i <= 100; i++)
+for (int i = 1; i <= 10; i++)
 {
     var salesItem = new SalesItem(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
     salesItem.SalesItemId = i;
     var pricingInfo =
-        new PricingInfo(salesItem.SalesItemId, 1, (float)randomiser.NextDouble() * 5, Guid.NewGuid().ToString());
+        new PricingInfo(salesItem.SalesItemId, 1, (PricingUnit)randomiser.Next(0, 2),
+            (float)randomiser.NextDouble() * 5, Guid.NewGuid().ToString());
     salesItem.PricingInfos.Add(pricingInfo);
     pricingInfo.SalesItem = salesItem;
 
     if (randomiser.Next(0, 20) > 14)
     {
-        var pricingRule = new PricingRule(Guid.NewGuid().ToString(), (PricingUnit)randomiser.Next(0, 2),
+        var pricingRule = new PricingRule(Guid.NewGuid().ToString(),
             (float)randomiser.NextDouble() * 5, (float)randomiser.NextDouble() * 3);
         pricingRule.PricingInfo = pricingInfo;
         pricingRule.PricingInfoId = pricingInfo.PricingInfoId;
@@ -36,8 +37,24 @@ for (int i = 1; i <= 100; i++)
 Console.WriteLine("Welcome to the random shop - please buy some items");
 Console.WriteLine("===================================");
 Console.WriteLine();
+
+foreach (var pricingInfo in pricingCatalogue.PricingInfos)
+{
+    Console.WriteLine(
+        $"Item Number: {pricingInfo.SalesItemId} Item Name: {pricingInfo.SalesItem.ItemName}. Cost: {pricingInfo.DefaultCostPerUnit}, Pricing Unit: {pricingInfo.PricingUnit}");
+    if (pricingInfo.AlternatePricing.Count > 0)
+    {
+        Console.WriteLine("Discounts:");
+        foreach (var pricingRule in pricingInfo.AlternatePricing)
+        {
+            Console.WriteLine(
+                $"    Discount Name: {pricingRule.PricingRuleName}, Discount Applies At: {pricingRule.DiscountQuantityThreshold}, Discounted Price: {pricingRule.CostPerUnit}");
+        }
+    }
+}
+
 Console.WriteLine(
-    "Enter an item number between 1 - 100 and an item quantity, separated by a comma to purchase an item. Or press backspace to checkout your cart");
+    "Enter an item number and an item quantity, separated by a comma to purchase an item. Or press backspace to checkout your cart.");
 
 var isStillShopping = true;
 var shoppingItems = new List<char>();
@@ -91,6 +108,10 @@ foreach (var (key, value) in itemTotals)
     if (pricingInfo is null)
         throw new InvalidOperationException(
             "Sales item in checkout has no pricing info in catalogue but was purchased!");
-    
-    Console.WriteLine($"You bought {value} {pricingInfo.SalesItem.ItemName} for a total cost of ${pricingInfo.ComputeCost(value)}");
+
+    Console.WriteLine(
+        $"You bought {value} {pricingInfo.SalesItem.ItemName} for a total cost of ${pricingInfo.ComputeCost(value)}");
 }
+
+//TODO: This console app is quick and dirty - it doesn't account for the difference between "Each" and "Weight" unit pricing
+//when displaying totals, for example. The underlying data calculations do account for it

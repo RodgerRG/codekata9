@@ -10,20 +10,26 @@ public class Checkout
         Total = 0;
         InitialiseCheckout(items);
     }
-    
-    private readonly Dictionary<int, float> _checkoutLookup = new (); 
-    
+
+    private readonly Dictionary<int, float> _checkoutLookup = new();
+
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int CheckoutId { get; set; }
+
     public int PricingCatalogueId { get; set; }
     public ICollection<CheckoutItem> CheckoutItems { get; set; }
     public float Total { get; set; }
     public DateTime ExpiryDate { get; set; }
     public PricingCatalogue PricingCatalogue { get; set; }
-    
+
     public void Scan(CheckoutItem item)
     {
         CheckoutItems.Add(item);
+        var pricing = PricingCatalogue.PricingInfos.FirstOrDefault(pi => pi.SalesItemId == item.SalesItemId);
+        if (pricing is not null && pricing.PricingUnit == PricingUnit.Each)
+        {
+            item.ItemRowQuantity = (float) Math.Round(item.ItemRowQuantity);
+        }
 
         if (_checkoutLookup.Remove(item.SalesItemId, out var existingQuantity))
         {
@@ -32,7 +38,7 @@ public class Checkout
             ComputeTotal(item, existingQuantity, updatedQuantity);
             return;
         }
-        
+
         _checkoutLookup.Add(item.SalesItemId, item.ItemRowQuantity);
         ComputeTotal(item, 0, item.ItemRowQuantity);
     }
@@ -52,7 +58,7 @@ public class Checkout
     {
         if (_checkoutLookup.Values.Count > 0)
             throw new InvalidOperationException("Cannot initialise a checkout that has already been initialised");
-        
-        foreach(var item in items) Scan(item);
+
+        foreach (var item in items) Scan(item);
     }
 }
